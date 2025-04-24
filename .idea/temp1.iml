@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Python" name="Python">
+      <configuration sdkName="3.13 @ Ubuntu" />
+    </facet>
+  </component>
+  <component name="Go">
+    <buildTags>
+      <option name="os" value="linux" />
+    </buildTags>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="jdk" jdkName="Python 3.11.8 WSL (Ubuntu): (/home/ks/work/temp1/.venv/bin/python3)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="3.13 @ Ubuntu interpreter library" level="application" />
+  </component>
+</module>
