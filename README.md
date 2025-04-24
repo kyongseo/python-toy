@@ -1,3 +1,14 @@
+- 사용 스택 및 구성
+  - 백엔드: Python 3.11, FastAPI, Uvicorn 
+  - DB: PostgreSQL (Docker 컨테이너 기반)
+  - ORM: SQLAlchemy 
+  - DB Migration: Alembic 
+  - 패키지 관리: uv-> 빠른 pip 대체 도구
+  - 실행 환경: Docker + Docker Compose (WSL 기반)
+  - 의존성 정의: pyproject.toml 기반, uv pip compile 사용
+
+---
+
 1. `uv init {uv-name}`
    - 새로운 uv 프로젝트 초기화
    - {uv-name} 폴더 생성 후 내부 구조
