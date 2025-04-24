@@ -15,8 +15,8 @@ RUN uv pip compile pyproject.toml > requirements.txt
 # requirements.txt 복사 및 설치
 COPY requirements.txt ./
 RUN uv pip install --system --requirements=requirements.txt && \
-    pip install psycopg2-binary \
-    # 명시적으로 설치 추가
+     pip install psycopg2-binary
+# 명시적으로 설치 추가
 
 # 전체 코드 복사
 COPY . .

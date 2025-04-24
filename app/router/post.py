@@ -2,17 +2,17 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.crud import post as posts
 from app.model.post import Base
 from app.database.database import SessionLocal, engine
-from app.schema.post import Post, PostCreate
-from app.crud.post import get_post, get_posts, update_post, get_user_by_name
-
+from app.schema.post import Post, PostCreate, PostUpdate
+from app.crud.post import get_post, get_posts, get_user_by_id
+from app.crud.post import update_post as crud_update_post
+from app.crud.post import create_post as crud_create_post
+from app.crud.post import delete_post as crud_delete_post
 router = APIRouter(prefix="/posts", tags=["post"])
 
 Base.metadata.create_all(bind=engine)
 
-# 의존성
 def get_db():
     db = SessionLocal()
     try:
@@ -22,19 +22,19 @@ def get_db():
 
 # 게시물 생성
 @router.post(
-    "/users/{user_name}/posts/",
+    "/users/{user_id}",
     response_model=Post,
     summary="글 작성"
 )
-def create_post(user_name: str, post: PostCreate, db: Session = Depends(get_db)):
-    db_user = get_user_by_name(db, user_name=user_name)
-    if db_user is None:
+def create_post(user_id: int, post: PostCreate, db: Session = Depends(get_db)):
+    db_user = get_user_by_id(db, user_id=user_id)
+    if not db_user:
         raise HTTPException(status_code=404, detail="유저를 찾을 수 없습니다.")
-    return posts.create_post(db, post=post, user_id=db_user.id)
+    return crud_create_post(db, post=post, user_id=db_user.id)
 
 # 모든 게시물 읽기
 @router.get(
-    "/",
+    "",
     response_model=List[Post],
     summary="글 목록"
 )
@@ -49,7 +49,7 @@ def read_posts(db: Session = Depends(get_db)):
 )
 def read_post(post_id: int, db: Session = Depends(get_db)):
     db_post = get_post(db, post_id=post_id)
-    if db_post is None:
+    if not db_post:
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다.")
     return db_post
 
@@ -59,11 +59,11 @@ def read_post(post_id: int, db: Session = Depends(get_db)):
     response_model=Post,
     summary="글 수정"
 )
-def update_post(post_id: int, updated_post: PostCreate, db: Session = Depends(get_db)):
+def update_post(post_id: int, updated_post: PostUpdate, db: Session = Depends(get_db)):
     db_post = get_post(db, post_id)
-    if db_post is None:
+    if not db_post:
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다.")
-    return update_post(db, post=db_post, updated_post=updated_post)
+    return crud_update_post(db, post=db_post, updated_post=updated_post)
 
 # 게시물 삭제
 @router.delete(
@@ -72,9 +72,7 @@ def update_post(post_id: int, updated_post: PostCreate, db: Session = Depends(ge
 )
 def delete_post(post_id: int, db: Session = Depends(get_db)):
     db_post = get_post(db, post_id=post_id)
-    if db_post is None:
+    if not db_post:
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다.")
-    posts.delete_post(db, post=db_post)
-    return {"message": "게시글이 삭제되었습니다."}
-
-
+    crud_delete_post(db, post=db_post)
+    return {"success": True, "message": "게시글이 삭제되었습니다."}
