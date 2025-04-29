@@ -1,8 +1,6 @@
 from sqlalchemy.orm import Session
 from app.model.user import User as user_model
-import app.schema.post
-
-schema = app.schema.post
+from app.schema.post import UserCreate
 
 def get_user(db: Session, user_id: int):
     return db.query(user_model).filter(user_model.id == user_id).first()
@@ -16,7 +14,7 @@ def get_user_by_name(db: Session, user_name: str):
 def get_user_by_id(db: Session, user_id: int):
     return db.query(user_model).filter(user_model.id == user_id).first()
 
-def create_user(db: Session, user: schema.UserCreate):
+def create_user(db: Session, user: UserCreate):
     db_user = user_model(name=user.name)
     db.add(db_user)
     db.commit()

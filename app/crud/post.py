@@ -1,10 +1,7 @@
 from sqlalchemy.orm import Session
-
 from app.model.post import Post as post_model
 from app.model.user import User as user_model
-
 from app.schema.post import Post, PostCreate, UserCreate
-
 
 def get_user(db: Session, user_id: int):
     return db.query(user_model).filter(user_model.id == user_id).first()

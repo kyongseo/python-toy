@@ -1,7 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
 from app.model.post import Base
 from app.database.database import SessionLocal, engine
 from app.schema.post import Post, PostCreate, PostUpdate
