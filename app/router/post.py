@@ -29,8 +29,9 @@ def get_db():
 def create_post(user_id: int, post: PostCreate, db: Session = Depends(get_db)):
     db_user = get_user_by_id(db, user_id=user_id)
     if not db_user:
-        raise HTTPException(status_code=404, detail="유저를 찾을 수 없습니다.")
-    return crud_create_post(db, post=post, user_id=db_user.id)
+        raise HTTPException(status_code=404, detail="사용자를 찾을 수 없습니다.")
+    crud_create_post(db, post=post, user_id=db_user.id)
+    return {"success": True, "message": ""}
 
 # 모든 게시물 읽기
 @router.get(
@@ -63,7 +64,8 @@ def update_post(post_id: int, updated_post: PostUpdate, db: Session = Depends(ge
     db_post = get_post(db, post_id)
     if not db_post:
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다.")
-    return crud_update_post(db, post=db_post, updated_post=updated_post)
+    crud_update_post(db, post=db_post, updated_post=updated_post)
+    return {"success":True, "message": "게시글이 수정되었습니다."}
 
 # 게시물 삭제
 @router.delete(

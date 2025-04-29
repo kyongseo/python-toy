@@ -2,14 +2,15 @@ from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, text
 from sqlalchemy.orm import relationship
 from app.database import database
 from datetime import datetime
+from sqlalchemy.sql import func
 
 Base = database.Base
 
 class User(Base):
     __tablename__  = "users"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(10), unique=True, nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True, comment="PK")
+    name = Column(String(10), unique=True, nullable=False, comment="이름")
 
     # 연관관계 설정 one to many
     posts = relationship("Post", back_populates="writer")
@@ -18,12 +19,13 @@ class Post(Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, unique=True, index=True)
-    content = Column(String, unique=True, index=True)
+    title = Column(String, index=True)
+    content = Column(String, index=True)
     # 처음 데이터 삽입 시 default로 생성일자 생성
-    created_at = Column(DateTime(timezone=True), default=datetime.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
     # 데이터가 수정 될 때 자동으로 수정일자 업데이트
-    modified_at = Column(DateTime(timezone=True), default=datetime.now, onupdate=datetime.now)
+    modified_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     # 자식 테이블이 부모 테이블을 참조
     writer_id = Column(Integer, ForeignKey("users.id"))
     writer = relationship("User", back_populates="posts")
+

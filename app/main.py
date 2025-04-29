@@ -1,4 +1,3 @@
-from contextlib import asynccontextmanager
 from typing import Union
 from app.core.metadata import swagger_metadata
 
